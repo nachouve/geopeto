@@ -1,10 +1,23 @@
--- Function: uve_split(text, text)
+--
+-- PostgreSQL database dump
+--
 
--- DROP FUNCTION uve_split(text, text);
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
 
-CREATE OR REPLACE FUNCTION uve_split(layer1 text, layer2 text)
-  RETURNS text AS
-$BODY$plpy.info(">>>>>>> Starting uve_split...")
+SET search_path = public, pg_catalog;
+
+--
+-- Name: uve_split(text, text); Type: FUNCTION; Schema: public; Owner: otsix
+--
+
+CREATE FUNCTION uve_split(layer1 text, layer2 text) RETURNS text
+    LANGUAGE plpythonu
+    AS $$plpy.info(">>>>>>> Starting uve_split...")
 
 schema1 = 'public'
 tablename1 = layer1
@@ -48,8 +61,12 @@ plpy.execute(stmt)
 #    VALUES ('', 'public','"+out_lyr+"' , 'the_geom', 2, '23029', 'POLYGON');"
 #plpy.execute(stmt)
 
-return out_lyr$BODY$
-  LANGUAGE plpythonu VOLATILE
-  COST 100;
-ALTER FUNCTION uve_split(text, text)
-  OWNER TO otsix;
+return out_lyr$$;
+
+
+ALTER FUNCTION public.uve_split(layer1 text, layer2 text) OWNER TO otsix;
+
+--
+-- PostgreSQL database dump complete
+--
+

@@ -1,10 +1,23 @@
--- Function: uve_spatial_percent(text, text, text, text)
+--
+-- PostgreSQL database dump
+--
 
--- DROP FUNCTION uve_spatial_percent(text, text, text, text);
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
 
-CREATE OR REPLACE FUNCTION uve_spatial_percent(table_territ_unit text, cols_territ_unit text, table_values text, cols_values text)
-  RETURNS text AS
-$BODY$plpy.info(">>>>>>> Starting uve_spatial_percent...")
+SET search_path = public, pg_catalog;
+
+--
+-- Name: uve_spatial_percent(text, text, text, text); Type: FUNCTION; Schema: public; Owner: otsix
+--
+
+CREATE FUNCTION uve_spatial_percent(table_territ_unit text, cols_territ_unit text, table_values text, cols_values text) RETURNS text
+    LANGUAGE plpythonu
+    AS $$plpy.info(">>>>>>> Starting uve_spatial_percent...")
 
 
 ### Creating aux table
@@ -148,8 +161,12 @@ stmt = "ALTER TABLE "+tb_tu+"_b DROP COLUMN geo_borrar"
 plpy.execute(stmt)
 
 
-plpy.info("Result layer: "+ tb_tu+"_b")$BODY$
-  LANGUAGE plpythonu VOLATILE
-  COST 100;
-ALTER FUNCTION uve_spatial_percent(text, text, text, text)
-  OWNER TO otsix;
+plpy.info("Result layer: "+ tb_tu+"_b")$$;
+
+
+ALTER FUNCTION public.uve_spatial_percent(table_territ_unit text, cols_territ_unit text, table_values text, cols_values text) OWNER TO otsix;
+
+--
+-- PostgreSQL database dump complete
+--
+

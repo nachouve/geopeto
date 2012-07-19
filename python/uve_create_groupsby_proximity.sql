@@ -1,10 +1,23 @@
--- Function: uve_create_groupsby_proximity(text, text, double precision)
+--
+-- PostgreSQL database dump
+--
 
--- DROP FUNCTION uve_create_groupsby_proximity(text, text, double precision);
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
 
-CREATE OR REPLACE FUNCTION uve_create_groupsby_proximity("table" text, id_col text, tolerance double precision)
-  RETURNS text AS
-$BODY$from sys import maxint
+SET search_path = public, pg_catalog;
+
+--
+-- Name: uve_create_groupsby_proximity(text, text, double precision); Type: FUNCTION; Schema: public; Owner: otsix
+--
+
+CREATE FUNCTION uve_create_groupsby_proximity("table" text, id_col text, tolerance double precision) RETURNS text
+    LANGUAGE plpythonu
+    AS $$from sys import maxint
 
 schema = 'public'
 tablename = table
@@ -69,9 +82,12 @@ for res in result:
 
 plpy.info('########################')
 
-return out_tbl+' --> See Message tab'$BODY$
-  LANGUAGE plpythonu VOLATILE
-  COST 100;
-ALTER FUNCTION uve_create_groupsby_proximity(text, text, double precision)
-  OWNER TO otsix;
-COMMENT ON FUNCTION uve_create_groupsby_proximity(text, text, double precision) IS 'IMPORTANT: the col_id must be a PRIMARY KEY or at least be unique!';
+return out_tbl+' --> See Message tab'$$;
+
+
+ALTER FUNCTION public.uve_create_groupsby_proximity("table" text, id_col text, tolerance double precision) OWNER TO otsix;
+
+--
+-- PostgreSQL database dump complete
+--
+

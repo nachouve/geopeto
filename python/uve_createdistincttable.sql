@@ -1,10 +1,23 @@
--- Function: uve_createdistincttable(text, text)
+--
+-- PostgreSQL database dump
+--
 
--- DROP FUNCTION uve_createdistincttable(text, text);
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
 
-CREATE OR REPLACE FUNCTION uve_createdistincttable("table" text, "column" text)
-  RETURNS text AS
-$BODY$plpy.info(">>>>>>> Starting uve_createdistincttable...")
+SET search_path = public, pg_catalog;
+
+--
+-- Name: uve_createdistincttable(text, text); Type: FUNCTION; Schema: public; Owner: otsix
+--
+
+CREATE FUNCTION uve_createdistincttable("table" text, "column" text) RETURNS text
+    LANGUAGE plpythonu
+    AS $_$plpy.info(">>>>>>> Starting uve_createdistincttable...")
 
 schema = 'public'
 tablename = table
@@ -41,8 +54,12 @@ for row in dstnct:
 
 return tb
 
-$BODY$
-  LANGUAGE plpythonu VOLATILE
-  COST 100;
-ALTER FUNCTION uve_createdistincttable(text, text)
-  OWNER TO otsix;
+$_$;
+
+
+ALTER FUNCTION public.uve_createdistincttable("table" text, "column" text) OWNER TO otsix;
+
+--
+-- PostgreSQL database dump complete
+--
+

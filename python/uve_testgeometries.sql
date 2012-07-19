@@ -1,10 +1,23 @@
--- Function: uve_testgeometries(text)
+--
+-- PostgreSQL database dump
+--
 
--- DROP FUNCTION uve_testgeometries(text);
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
 
-CREATE OR REPLACE FUNCTION uve_testgeometries(tablename text)
-  RETURNS text AS
-$BODY$plpy.info(">>>>>>>>>>>>>>>>>>>>>>>>> CHECK WRONG RESULTS")
+SET search_path = public, pg_catalog;
+
+--
+-- Name: uve_testgeometries(text); Type: FUNCTION; Schema: public; Owner: otsix
+--
+
+CREATE FUNCTION uve_testgeometries(tablename text) RETURNS text
+    LANGUAGE plpythonu
+    AS $$plpy.info(">>>>>>>>>>>>>>>>>>>>>>>>> CHECK WRONG RESULTS")
 stmt = "SELECT count(*) as count from "+tablename+" where st_geometrytype(the_geom) = 'ST_Unknown'";
 wg_result = plpy.execute(stmt)
 wrong_geoms = wg_result[0]["count"]
@@ -29,8 +42,12 @@ result = plpy.execute(stmt)
 for r in result:
     plpy.info(r["type"] + "[" + str(r["num"]) + "]")
 
-return "Check info on MessageTab."$BODY$
-  LANGUAGE plpythonu VOLATILE
-  COST 100;
-ALTER FUNCTION uve_testgeometries(text)
-  OWNER TO otsix;
+return "Check info on MessageTab."$$;
+
+
+ALTER FUNCTION public.uve_testgeometries(tablename text) OWNER TO otsix;
+
+--
+-- PostgreSQL database dump complete
+--
+

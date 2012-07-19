@@ -1,10 +1,23 @@
--- Function: uve_prepare_nogeo_columns(text[])
+--
+-- PostgreSQL database dump
+--
 
--- DROP FUNCTION uve_prepare_nogeo_columns(text[]);
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
 
-CREATE OR REPLACE FUNCTION uve_prepare_nogeo_columns(tables text[])
-  RETURNS text AS
-$BODY$def add2set(the_cols, element, preffix, count):
+SET search_path = public, pg_catalog;
+
+--
+-- Name: uve_prepare_nogeo_columns(text[]); Type: FUNCTION; Schema: public; Owner: otsix
+--
+
+CREATE FUNCTION uve_prepare_nogeo_columns(tables text[]) RETURNS text
+    LANGUAGE plpythonu
+    AS $_$def add2set(the_cols, element, preffix, count):
     values=element.split('.')
     column_name=''
     table=''
@@ -56,8 +69,12 @@ for tb in tbs:
 	    prep_cols = prep_cols+tb_col+' as '+aux_col+',' 
 
 plpy.info(prep_cols[:-1])
-return prep_cols[:-1]$BODY$
-  LANGUAGE plpythonu VOLATILE
-  COST 100;
-ALTER FUNCTION uve_prepare_nogeo_columns(text[])
-  OWNER TO otsix;
+return prep_cols[:-1]$_$;
+
+
+ALTER FUNCTION public.uve_prepare_nogeo_columns(tables text[]) OWNER TO otsix;
+
+--
+-- PostgreSQL database dump complete
+--
+

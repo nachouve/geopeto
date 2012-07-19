@@ -12,10 +12,10 @@ SET escape_string_warning = off;
 SET search_path = public, pg_catalog;
 
 --
--- Name: uve_optimize_area_layer(text, integer); Type: FUNCTION; Schema: public; Owner: admin
+-- Name: uve_optimize_simplearea_layer(text, integer); Type: FUNCTION; Schema: public; Owner: admin
 --
 
-CREATE FUNCTION uve_optimize_area_layer("table" text, tolerance integer) RETURNS boolean
+CREATE FUNCTION uve_optimize_simplearea_layer("table" text, tolerance integer) RETURNS boolean
     LANGUAGE plpythonu
     AS $$schema = 'public'
 tablename = table
@@ -37,8 +37,8 @@ if (len(ret)>0):
 
 plpy.info("## Buffer 0.0 and simplify geometry");
 ## Buffer 0.0 and simplify geometry
-stmt = "update "+table+" SET the_geom=st_multi(ST_SimplifyPreserveTopology(\
-	st_buffer(the_geom,0.0), "+str(tolerance)+"));"
+stmt = "update "+table+" SET the_geom=(st_dump(st_multi(ST_SimplifyPreserveTopology(\
+	st_buffer(the_geom,0.0), "+str(tolerance)+")))).geom;"
 plpy.execute(stmt)
 
 
@@ -57,10 +57,11 @@ plpy.info("## Remenber to do VACUUM "+ table);
 #--plpy.execute("ANALYZE "+table)
 
 return True
+
 $$;
 
 
-ALTER FUNCTION public.uve_optimize_area_layer("table" text, tolerance integer) OWNER TO admin;
+ALTER FUNCTION public.uve_optimize_simplearea_layer("table" text, tolerance integer) OWNER TO admin;
 
 --
 -- PostgreSQL database dump complete

@@ -1,10 +1,23 @@
--- Function: uve_copy_reprojecting(text, text, integer)
+--
+-- PostgreSQL database dump
+--
 
--- DROP FUNCTION uve_copy_reprojecting(text, text, integer);
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
 
-CREATE OR REPLACE FUNCTION uve_copy_reprojecting(layer_org text, layer_dst text, srid_dst integer)
-  RETURNS boolean AS
-$BODY$result = plpy.execute("SELECT srid from geometry_columns WHERE f_table_name = '"+layer_org+"'")
+SET search_path = public, pg_catalog;
+
+--
+-- Name: uve_copy_reprojecting(text, text, integer); Type: FUNCTION; Schema: public; Owner: otsix
+--
+
+CREATE FUNCTION uve_copy_reprojecting(layer_org text, layer_dst text, srid_dst integer) RETURNS boolean
+    LANGUAGE plpythonu
+    AS $$result = plpy.execute("SELECT srid from geometry_columns WHERE f_table_name = '"+layer_org+"'")
 
 srid_org = -1
 if (len(result)==1):
@@ -22,9 +35,12 @@ stmt = "CREATE TABLE "+layer_dst+" AS "\
 plpy.execute(stmt)
 
 #plpy.execute("UPDATE "+layer_dst+" SET the_geom = st_transform(the_geom, "+srid_dst+")")
-plpy.execute("UpdateGeometrySRID("+layer_dst+", the_geom, "+srid_dst+");")$BODY$
-  LANGUAGE plpythonu VOLATILE
-  COST 100;
-ALTER FUNCTION uve_copy_reprojecting(text, text, integer)
-  OWNER TO otsix;
+plpy.execute("UpdateGeometrySRID("+layer_dst+", the_geom, "+srid_dst+");")$$;
+
+
+ALTER FUNCTION public.uve_copy_reprojecting(layer_org text, layer_dst text, srid_dst integer) OWNER TO otsix;
+
+--
+-- PostgreSQL database dump complete
+--
 

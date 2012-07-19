@@ -1,10 +1,23 @@
--- Function: uve_add_gid_pk(text)
+--
+-- PostgreSQL database dump
+--
 
--- DROP FUNCTION uve_add_gid_pk(text);
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
 
-CREATE OR REPLACE FUNCTION uve_add_gid_pk("table" text)
-  RETURNS boolean AS
-$BODY$schema = 'public'
+SET search_path = public, pg_catalog;
+
+--
+-- Name: uve_add_gid_pk(text); Type: FUNCTION; Schema: public; Owner: admin
+--
+
+CREATE FUNCTION uve_add_gid_pk("table" text) RETURNS boolean
+    LANGUAGE plpythonu
+    AS $$schema = 'public'
 tablename = table
 dot_idx = table.find('.')
 if (dot_idx > -1):
@@ -29,8 +42,12 @@ plpy.execute(stmt)
 stmt ='ALTER TABLE "'+schema+'"."'+tablename+'" DROP CONSTRAINT "'+tablename+'_gid_key" RESTRICT;'
 plpy.execute(stmt)
 stmt ='ALTER TABLE "'+schema+'"."'+tablename+'"  ADD PRIMARY KEY ("gid");'
-plpy.execute(stmt)$BODY$
-  LANGUAGE plpythonu VOLATILE
-  COST 100;
-ALTER FUNCTION uve_add_gid_pk(text)
-  OWNER TO admin;
+plpy.execute(stmt)$$;
+
+
+ALTER FUNCTION public.uve_add_gid_pk("table" text) OWNER TO admin;
+
+--
+-- PostgreSQL database dump complete
+--
+
