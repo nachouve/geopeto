@@ -41,22 +41,33 @@ CREATE OR REPLACE FUNCTION gpt_inpolygon_aggregate(layer1 text, layer2 text, new
     LANGUAGE plpythonu VOLATILE
       COST 100;
       ALTER FUNCTION gpt_inpolygon_aggregate(text, text, text, text, text, text)
-        OWNER TO otsix;
-	COMMENT ON FUNCTION gpt_inpolygon_aggregate(text, text, text, text, text, text) IS '
-	#################################################
-	# Geopeto Project (see at github)
-	#################################################
-	#-- Function: gpt_inpolygon_aggregate
-	#-- Description:
-	#   Apply ''aggregation_expr'' on the ''layer2'' filtered by ''where_clause'' and intersects features of ''layer1''
-	#   A layer ''new_layer'' is created with the ''new_col'' column with the counting (and geometries of layer1)
-	#
-	#   ''aggregation_expr'' should be like ''sum(b.area)'',''round(sum(b.sup)::NUMERIC,1)'',  ''count(b.*)'',
-	#         etc. The ''b'' is the alias for layer2 inside the function.
-	#
-	#-- NOTE: Layers must have "gid" column
-	#################################################
-	#-- AUTHOR: Nacho Varela
-	#-- DATE: 2012/05
-	#################################################';
-	
+        OWNER TO postgres;
+COMMENT ON FUNCTION gpt_inpolygon_aggregate(text, text, text, text, text, text) IS 
+'#################################################
+# Geopeto Project (see at github)
+#################################################
+#-- Function: gpt_inpolygon_aggregate
+#-- Description:   
+#   Apply ''aggregation_expr'' on the ''layer2'' filtered by ''where_clause'' and intersects features of ''layer1''
+#   A layer ''new_layer'' is created with the ''new_col'' column with the counting (and geometries of layer1)
+#
+#   Parameters:
+#   layer1 (text): Name of the table with the mask layer. It must be a polygon or multipolygon layer. 
+#   layer2 (text): Name of the table with layer to apply the aggregation operation. 
+#   new_layer (text): Name of the new table with the result.  
+#   new_col (text): column name of the new column.
+#   aggregate_expr (text): operation to populate the "new_col" column
+#   where_clause (text): expression to filter "layer2"
+#
+#   ''aggregation_expr'' should be like this examples:
+#    * ''sum(b.area)''
+#    * ''round(sum(b.sup)::NUMERIC,1)''
+#    * ''count(b.*)''
+#    * ...
+#    where ''b'' is the alias for layer2 inside the function.
+#
+#-- NOTE: Layers must have "gid" column
+#################################################
+#-- AUTHOR: Nacho Varela
+#-- DATE: 2012/05
+#################################################';
