@@ -43,6 +43,12 @@ xm := (x1+x2)/2;
 ym := (y1+y2)/2;
 m := (y2-y1)/(x2-x1);
 
+-- Curve point 
+-- NOTE el vector DEBE SER UNITARIO!!!!!!!!
+mod_vect := sqrt(m*m + 1);
+xp := xm + ((m/mod_vect) * d/10); 
+yp := ym + ((-1/mod_vect) * d/10);
+
 --RAISE NOTICE '------------';
 --RAISE NOTICE 'Distance: %',d;
 --RAISE NOTICE 'Pendiente: %',m;
@@ -50,10 +56,6 @@ m := (y2-y1)/(x2-x1);
 --RAISE NOTICE 'y1: %',y1;
 --RAISE NOTICE 'xm: %',xm;
 --RAISE NOTICE 'ym: %',ym;
-
--- Curve point
-xp := xm - (m * d/10);
-yp := ym - (-1 * d/10);
 
 curve := st_curvetoline(st_geometry('CIRCULARSTRING('||x1::text||' '||y1::text||', '||xp::text||' '||yp::text||', '||x2::text||' '||y2::text||')'));
 
