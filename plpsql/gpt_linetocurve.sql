@@ -19,6 +19,10 @@ ym double precision;
 xp double precision;
 yp double precision;
 
+dx double precision;
+dy double precision;
+quadrant int;
+
 m double precision;
 d double precision;
 
@@ -41,11 +45,35 @@ y2 := st_y(p2);
 --Median point
 xm := (x1+x2)/2;
 ym := (y1+y2)/2;
-m := (y2-y1)/(x2-x1);
 
--- Curve point 
--- NOTE el vector DEBE SER UNITARIO!!!!!!!!
+dx := x2-x1;
+dy := y2-y1;
+
+m := dy/dx;
+
+    IF dx < 0 THEN
+    IF m < 0 THEN
+            quadrant := 1;
+        ELSE
+            quadrant := 2;
+        END IF;
+    ELSE
+        IF m < 0 THEN
+            quadrant := 3;
+        ELSE
+            quadrant := 0;
+        END IF;
+    END IF;
+
+    -- Curve on the other side
+    IF quadrant <= 1 THEN
+        d := -1 * d;
+    END IF;
+
+-- Perpendicular Direction Vector is (m, -1)
+-- Direction Unit vector 
 mod_vect := sqrt(m*m + 1);
+
 xp := xm + ((m/mod_vect) * d/10); 
 yp := ym + ((-1/mod_vect) * d/10);
 
