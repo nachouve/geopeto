@@ -1,4 +1,3 @@
-pt_getfeaturewithmaxareaintersected(text, text, text, text)
 -- DROP FUNCTION gpt_getfeaturewithmaxareaintersected(text, text, text, text);
 
 CREATE OR REPLACE FUNCTION gpt_getfeaturewithmaxareaintersected(layer_a text, layer_b text, id_b text, output_layer text)
